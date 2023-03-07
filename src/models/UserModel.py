@@ -11,6 +11,7 @@ class UserModel(db.Model):
   username = db.Column(db.String(50))
   password = db.Column(db.String(500))
   email = db.Column(db.String(100))
+  bills = db.relationship("BillModel")
 
 
   def __init__(self, username, password, email):
