@@ -22,4 +22,4 @@ class UserModel(db.Model):
 
 class UserSchema(ma.Schema):
   class Meta:
-    fields = ("id", "password", "email")
+    fields = ("id", "username", "password", "email")
