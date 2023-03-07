@@ -7,7 +7,7 @@ from database.db import db
 # config
 from config import DATABASE_URI_CONNECTION, SECRET_KEY
 # import Blueprints
-# from routes import Usuario, Tipousuario, Ordenproduccion, Chorro
+from routes import User, Bill
 
 app = Flask(__name__)
 
@@ -25,4 +25,8 @@ with app.app_context():
 
 
 if __name__ == "__main__":
+  # Blueprints
+  app.register_blueprint(User.user_bp, url_prefix="/user")
+  app.register_blueprint(Bill.bill_bp, url_prefix="/bill")
+
   app.run(debug=True)
