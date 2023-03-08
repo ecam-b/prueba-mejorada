@@ -27,6 +27,6 @@ with app.app_context():
 if __name__ == "__main__":
   # Blueprints
   app.register_blueprint(User.user_bp, url_prefix="/user")
-  app.register_blueprint(Bill.bill_bp, url_prefix="/bill")
+  app.register_blueprint(Bill.bill_bp, url_prefix="/bills")
 
   app.run(debug=True)
