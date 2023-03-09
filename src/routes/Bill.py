@@ -5,18 +5,27 @@ for_him = BillSchema()
 for_them = BillSchema(many=True)
 # database
 from database.db import db
+# security
+from token_required import token_required
 
 bill_bp = Blueprint("bill", __name__)
 
 
 @bill_bp.route("/", methods=["GET"])
-def get_all_bills():
+@token_required
+def get_all_bills(usuario_actual):
   """
   Obtener todos las Bills
   Obtener todas las Bills registradas en la base de datos.
   ---
   tags:
   - Bill
+  parameters:
+    - name: x-access-token
+      in: header
+      type: string
+      required: true
+      description: Token de autentificación.
   responses:
     200:
       description: OK
@@ -58,7 +67,8 @@ def get_all_bills():
   
 
 @bill_bp.route("/", methods=["POST"])
-def add_bill():
+@token_required
+def add_bill(usuario_actual):
   """
   Registrar una Bill
   Registrar una nueva bill en la base de datos.
@@ -66,34 +76,39 @@ def add_bill():
   tags:
   - Bill
   parameters:
-  - name: bill
-    in: body
-    required: true
-    description: Datos para registrar una nueva bill.
-    schema:
-      type: object
-      properties:
-        date_bill:
-          type: date
-          description: Fecha de creación de la bill.
-        user_id: 
-          type: integer
-          description: Usuario que crea la bill.
-        value: 
-          type: integer
-          description: Valor de la bill.
-        type:
-          type: integer
-          description: Tipo de bill.
-        observation: 
-          type: string
-          description: Observación adicional sobre la bill.
-      example:
-        date_bill: "12-12-12"
-        user_id: 1
-        value: 10
-        type: 1
-        observation: "Todo correcto"
+    - name: x-access-token
+      in: header
+      type: string
+      required: true
+      description: Token de autentificación.
+    - name: bill
+      in: body
+      required: true
+      description: Datos para registrar una nueva bill.
+      schema:
+        type: object
+        properties:
+          date_bill:
+            type: date
+            description: Fecha de creación de la bill.
+          user_id: 
+            type: integer
+            description: Usuario que crea la bill.
+          value: 
+            type: integer
+            description: Valor de la bill.
+          type:
+            type: integer
+            description: Tipo de bill.
+          observation: 
+            type: string
+            description: Observación adicional sobre la bill.
+        example:
+          date_bill: "12-12-12"
+          user_id: 1
+          value: 10
+          type: 1
+          observation: "Todo correcto"
   responses:
     200:
       description: OK
@@ -145,7 +160,8 @@ def add_bill():
   
 
 @bill_bp.route("/<id>", methods=["PUT"])
-def update_bill(id):
+@token_required
+def update_bill(usuario_actual, id):
   """
   Actualizar una Bill
   Actualizar una bill en la base de datos.
@@ -153,39 +169,44 @@ def update_bill(id):
   tags:
   - Bill
   parameters:
-  - name: id
-    in: path
-    required: true
-    description: ID de la Bill.
-    type: integer
-  - name: bill
-    in: body
-    required: true
-    description: Datos para actualizar una bill.
-    schema:
-      type: object
-      properties:
-        date_bill:
-          type: date
-          description: Fecha de creación de la bill.
-        user_id: 
-          type: integer
-          description: Usuario que actualiza la bill.
-        value: 
-          type: integer
-          description: Valor de la bill.
-        type:
-          type: integer
-          description: Tipo de bill.
-        observation: 
-          type: string
-          description: Observación adicional sobre la bill.
-      example:
-        date_bill: "12-12-12"
-        user_id: 1
-        value: 10
-        type: 1
-        observation: "Todo correcto"
+    - name: x-access-token
+      in: header
+      type: string
+      required: true
+      description: Token de autentificación.
+    - name: id
+      in: path
+      required: true
+      description: ID de la Bill.
+      type: integer
+    - name: bill
+      in: body
+      required: true
+      description: Datos para actualizar una bill.
+      schema:
+        type: object
+        properties:
+          date_bill:
+            type: date
+            description: Fecha de creación de la bill.
+          user_id: 
+            type: integer
+            description: Usuario que actualiza la bill.
+          value: 
+            type: integer
+            description: Valor de la bill.
+          type:
+            type: integer
+            description: Tipo de bill.
+          observation: 
+            type: string
+            description: Observación adicional sobre la bill.
+        example:
+          date_bill: "12-12-12"
+          user_id: 1
+          value: 10
+          type: 1
+          observation: "Todo correcto"
   responses:
     200:
       description: OK
@@ -243,7 +264,8 @@ def update_bill(id):
 
 
 @bill_bp.route("/<id>", methods=["DELETE"])
-def delete_bill(id):
+@token_required
+def delete_bill(usuario_actual, id):
   """
   Eliminar una Bill
   Eliminar una bill en la base de datos.
@@ -251,11 +273,16 @@ def delete_bill(id):
   tags:
   - Bill
   parameters:
-  - name: id
-    in: path
-    required: true
-    description: ID de la Bill.
-    type: integer
+    - name: x-access-token
+      in: header
+      type: string
+      required: true
+      description: Token de autentificación.
+    - name: id
+      in: path
+      required: true
+      description: ID de la Bill.
+      type: integer
   responses:
     200:
       description: OK
